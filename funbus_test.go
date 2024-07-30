@@ -1,4 +1,4 @@
-package hexades
+package funbus
 
 import (
 	"fmt"

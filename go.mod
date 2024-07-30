@@ -1,4 +1,4 @@
-module github.com/enjekt/hexabus
+module github.com/enjekt/funbus
 
 go 1.21.0
 
