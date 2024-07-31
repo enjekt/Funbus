@@ -5,8 +5,9 @@ import (
 	"reflect"
 	"sync"
 )
-//Mutex locking is for short periods as most of the message handling is on the channels themselves
-//and the bus is simply handing off the message to the channels it finds. 
+
+// Mutex locking is for short periods as most of the message handling is on the channels themselves
+// and the bus is simply handing off the message to the channels it finds.
 type Hexabus interface {
 	Subscribe(fn interface{}) error
 	Unsubscribe(fn interface{}) error
@@ -17,9 +18,9 @@ type hexabus struct {
 	registry map[string]map[reflect.Value]chan interface{}
 }
 
-var Bus = hexabus{registry: make(map[string]map[reflect.Value]chan interface{})}
+var bus = hexabus{registry: make(map[string]map[reflect.Value]chan interface{})}
 
-func (bus *hexabus) Subscribe(fn interface{}) error {
+func Subscribe(fn interface{}) error {
 	bus.mu.Lock()
 	defer bus.mu.Unlock()
 	handlerType := reflect.TypeOf(fn)
@@ -44,7 +45,7 @@ func (bus *hexabus) Subscribe(fn interface{}) error {
 	return nil
 }
 
-func (bus *hexabus) Unsubscribe(fn interface{}) error {
+func Unsubscribe(fn interface{}) error {
 	bus.mu.Lock()
 	defer bus.mu.Unlock()
 	handlerType := reflect.TypeOf(fn)
@@ -71,7 +72,7 @@ func (bus *hexabus) Unsubscribe(fn interface{}) error {
 	return nil
 }
 
-func (bus *hexabus) Send(event interface{}) {
+func Send(event interface{}) {
 	bus.mu.Lock()
 	defer bus.mu.Unlock()
 	channelMap := bus.registry[reflect.TypeOf(event).Name()]

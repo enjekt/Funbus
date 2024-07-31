@@ -12,19 +12,19 @@ func TestSubscribeUnsubscribeSend(t *testing.T) {
 	data := MyData{}
 
 	var handler = NewEventHandler(&data)
-	Bus.Subscribe(handler)
-	Bus.Send(MyEvent{"foo"})
+	Subscribe(handler)
+	Send(MyEvent{"foo"})
 	time.Sleep((100 * time.Millisecond))
 	assert.Equal(t, "foo", data.val)
 
-	Bus.Unsubscribe(handler)
+	Unsubscribe(handler)
 	handler = NewEventHandler(&data)
-	Bus.Send(MyEvent{"bar"})
+	Send(MyEvent{"bar"})
 	time.Sleep((100 * time.Millisecond))
 	assert.Assert(t, !(data.val == "bar"))
 
-	Bus.Subscribe(handler)
-	Bus.Send(MyEvent{"bar"})
+	Subscribe(handler)
+	Send(MyEvent{"bar"})
 	time.Sleep(100 * time.Millisecond)
 	assert.Equal(t, data.val, "bar")
 
